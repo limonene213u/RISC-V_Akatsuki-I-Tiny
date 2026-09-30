@@ -48,9 +48,9 @@ For Rev0.3 bring-up, **do not externally drive J7-5**. The hardware/firmware mit
 ```
 hardware/
   rev03/
-    kicad/            KiCad board/project/schematic sources
-    manufacturing/    JLCPCB-ready Gerber archive
-    source/            complete Rev0.3 source archive
+    kicad/            KiCad project metadata / library tables
+    manufacturing/    manufacturing archive destination
+    source/            full KiCad source archive destination
     netlist_rev03.csv
     parts_list_rev03.csv
 docs/
@@ -78,6 +78,21 @@ Current tracked work includes Rev0.3 pin validation, J7-5 protection policy, fir
 7. Test SPI SRAM.
 8. Test software I2C.
 9. Test USB / SD last.
+
+## Binary design archives
+
+The text BOM/netlist/docs are committed. The two binary ZIP archives still need to be uploaded to the repository because the current connector cannot reliably transfer the original binary bytes.
+
+Expected files:
+
+- `hardware/rev03/manufacturing/gerber_rev03_JLC.zip`
+  - size: 161,207 bytes
+  - SHA-256: `fbb4d96957f28013e82998b69a4798d8ce7ebaeb7e506b686b80bedc80d15ccd`
+- `hardware/rev03/source/akatsuki_tiny_rev03.zip`
+  - size: 7,618,559 bytes
+  - SHA-256: `3f05fe586889200f3471e59771c409332d25a38a4daf7a1f5751d7d55efa80fc`
+
+Do not substitute an older Rev0.2 archive.
 
 ## Status
 
