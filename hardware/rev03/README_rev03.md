@@ -3,7 +3,7 @@
 **全部手はんだで作れる版です。JLC にはプリント基板だけ注文します（部品実装なし）。**
 
 ## JLC への注文
-1. `manufacturing/gerber_rev03_JLC.zip` を JLC にアップロード
+1. `manufacturing/gerber_rev03_JLC.zip` を JLC にアップロード（GitHubへ手動アップロード後）
 2. 基板サイズ 100×70mm、2層、厚さ 1.6mm。色はお好みで（黒ならシルクは白）
 3. **「PCB Assembly」はオフのまま**（ここをオンにすると高くなります）
 
@@ -24,7 +24,8 @@
 - JP1 は普段ジャンパなし（USB-C を挿さずに WCH-Link から給電するときだけ付ける）
 
 ## ファイル
-- `manufacturing/gerber_rev03_JLC.zip` … JLC に出すファイル
+- `manufacturing/gerber_rev03_JLC.zip` … JLC に出すファイル（GitHubへのbinary upload待ち）
+- `source/akatsuki_tiny_rev03.zip` … 元のRev0.3設計一式（GitHubへのbinary upload待ち）
 - `parts_list_rev03.csv` … 部品表
 - `netlist_rev03.csv` … 接続表
 - `../../docs/BOM_rev03.md` … 実装用BOM
@@ -32,3 +33,15 @@
 - `../../docs/BRINGUP_rev03.md` … 初回bring-upチェックリスト
 
 元のRev0.3パッケージでのチェック結果：ERC エラー 0、DRC 未接続 0（残りはシルクの重なり警告だけ）。
+
+
+## Binary archive integrity
+
+GitHubへ手動アップロードする元ファイル:
+
+- `gerber_rev03_JLC.zip`: 161,207 bytes  
+  SHA-256 `fbb4d96957f28013e82998b69a4798d8ce7ebaeb7e506b686b80bedc80d15ccd`
+- `akatsuki_tiny_rev03.zip`: 7,618,559 bytes  
+  SHA-256 `3f05fe586889200f3471e59771c409332d25a38a4daf7a1f5751d7d55efa80fc`
+
+古いRev0.2 archiveと混同しないこと。
