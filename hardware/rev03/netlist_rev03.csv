@@ -1,0 +1,174 @@
+Ref,Pin,PinName,Net,Note
+U1,0,GND(EP),GND,"Module pads ""0"" (both rows, top). Tied to QFN EP on the module"
+U1,1,PC15,NC,PC15 free in Rev0.3 (host power is now a manual switch)
+U1,2,VDD,+3V3,C3 100nF + C6 4.7uF right next to this socket pin (module has no decoupling)
+U1,3,PC0,EXP_PC0,
+U1,4,PC3,EXP_PC3,
+U1,5,PA0,LED0,
+U1,6,PA1,LED1,
+U1,7,PA2,BTN0,Internal pull-up
+U1,8,PA3,BTN1,Internal pull-up
+U1,9,PA4,SRAM_CS,
+U1,10,PA5,SPI_SCK,
+U1,11,PA6,SPI_MISO,
+U1,12,PA7,SPI_MOSI,
+U1,13,PB0,EXP_PB0,
+U1,14,PB3,SD_CS,
+U1,15,PB4,EXP_PB4,
+U1,16,PB1/PB5,NC,Internally shorted. Never set either as output
+U1,17,PB6,I2C_SDA,Software I2C
+U1,18,PB7,I2C_SCL,Software I2C
+U1,19,PB8,EXP_PB8,
+U1,20,PB9,EXP_PB9,
+U1,21,PB10,UART_TX,USART1 TX (default)
+U1,22,PB11,UART_RX,USART1 RX (default)
+U1,23,PB12,EXP_PB12,
+U1,24,PC19,DBG_DCK,SWCLK
+U1,25,PC18,DBG_DIO,SWDIO
+U1,26,PC16/UDM,USB_DM,Shorted to PC11 internally (keep PC11 floating input)
+U1,27,PC17/UDP,USB_DP,BOOT pin. Shorted to PC10 internally
+U1,28,PC14,EXP_PC14,CC1 function unused
+U3,1,A0,GND,
+U3,2,A1,GND,
+U3,3,A2,GND,
+U3,4,VSS,GND,
+U3,5,SDA,I2C_SDA,
+U3,6,SCL,I2C_SCL,
+U3,7,WP,GND,Write enabled
+U3,8,VCC,+3V3,
+U4,1,CS,SRAM_CS,
+U4,2,SO/SIO1,SPI_MISO,
+U4,3,SIO2,SRAM_SIO2,Via R10 to +3V3
+U4,4,VSS,GND,
+U4,5,SI/SIO0,SPI_MOSI,
+U4,6,SCK,SPI_SCK,
+U4,7,HOLD/SIO3,SRAM_HOLD,Via R11 to +3V3
+U4,8,VCC,+3V3,
+U5,1,I/O1,USB_DM,Pass-through with pin 6
+U5,2,GND,GND,
+U5,3,I/O2,USB_DP,Pass-through with pin 4
+U5,4,I/O2,USB_DP,
+U5,5,VBUS,+5V_HOST,
+U5,6,I/O1,USB_DM,
+R1,1,1,USBC_CC1,
+R1,2,2,GND,
+R2,1,1,USBC_CC2,
+R2,2,2,GND,
+R3,1,1,LED0,
+R3,2,2,LED0_A,
+R4,1,1,LED1,
+R4,2,2,LED1_A,
+R5,1,1,+3V3,
+R5,2,2,I2C_SDA,
+R6,1,1,+3V3,
+R6,2,2,I2C_SCL,
+R7,1,1,+3V3,
+R7,2,2,PWR_LED_A,
+R8,1,1,+3V3,
+R8,2,2,SRAM_CS,
+R9,1,1,+3V3,
+R9,2,2,SD_CS,
+R10,1,1,+3V3,
+R10,2,2,SRAM_SIO2,
+R11,1,1,+3V3,
+R11,2,2,SRAM_HOLD,
+R14,1,1,+3V3,
+R14,2,2,SD_MISO,
+C1,1,1,+5V,TA48033S input
+C1,2,2,GND,
+C2,1,1,+3V3,"47uF electrolytic, + side. TA48033S output"
+C2,2,2,GND,
+C3,1,1,+3V3,Near U1 pin2
+C3,2,2,GND,
+C4,1,1,+3V3,Near U3 pin8
+C4,2,2,GND,
+C5,1,1,+3V3,Near U4 pin8
+C5,2,2,GND,
+C6,1,1,+3V3,Near U1 pin2
+C6,2,2,GND,
+C8,1,+,+5V_HOST,Near J2. Polarized
+C8,2,-,GND,
+C9,1,1,+3V3,Near J6
+C9,2,2,GND,
+C10,1,1,+3V3,Near U7 VCC
+C10,2,2,GND,
+D1,2,A,LED0_A,
+D1,1,K,GND,
+D2,2,A,LED1_A,
+D2,1,K,GND,
+D3,2,A,PWR_LED_A,
+D3,1,K,GND,
+SW1,1,1,BTN0,6x6 tact: pads with the same number are internally connected
+SW1,2,2,GND,6x6 tact: pads with the same number are internally connected
+SW2,1,1,BTN1,6x6 tact: pads with the same number are internally connected
+SW2,2,2,GND,6x6 tact: pads with the same number are internally connected
+J2,1,1,+5V_HOST,
+J2,2,2,USB_DM,
+J2,3,3,USB_DP,
+J2,4,4,GND,
+J3,1,1,+5V,Unswitched 5V for LCD
+J3,2,2,+3V3,
+J3,3,3,GND,
+J3,4,4,I2C_SDA,
+J3,5,5,I2C_SCL,
+J4,1,1,J4_3V3,Connected to +3V3 only when JP1 is bridged
+J4,2,2,GND,
+J4,3,3,DBG_DIO,
+J4,4,4,DBG_DCK,
+JP1,1,1,J4_3V3,Normally open
+JP1,2,2,+3V3,
+J5,1,1,GND,
+J5,2,2,UART_TX,MCU TX -> adapter RX
+J5,3,3,UART_RX,MCU RX <- adapter TX
+J6,1,1,+3V3,
+J6,2,2,GND,
+J6,3,3,SPI_SCK,
+J6,4,4,SPI_MOSI,
+J6,5,5,SD_MISO,Through U7 to SPI_MISO
+J6,6,6,SD_CS,
+J7,1,1,+3V3,
+J7,2,2,GND,
+J7,3,3,EXP_PC0,
+J7,4,4,EXP_PC3,
+J7,5,5,EXP_PB0,
+J7,6,6,EXP_PB4,
+J7,7,7,EXP_PB8,
+J7,8,8,EXP_PB9,
+J7,9,9,EXP_PB12,
+J7,10,10,EXP_PC14,
+U2,1,IN,+5V,TA48033S (TO-220). Verify pinout in datasheet: 1=IN 2=GND 3=OUT
+U2,2,GND,GND,
+U2,3,OUT,+3V3,
+SW4,1,COM,VBUS_IN,Main power slide switch (also works as RESET: CH32X035G8U6 has no NRST pin)
+SW4,2,A,NC,
+SW4,3,B,+5V,
+F1,1,1,+5V,PPTC RXEF050 (hold 0.5A)
+F1,2,2,HOST_PPTC,
+SW3,1,COM,HOST_PPTC,USB host power slide switch. Turn ON after the board has booted
+SW3,2,A,NC,
+SW3,3,B,+5V_HOST,
+R15,1,1,+5V_HOST,Host power LED resistor 2.2k
+R15,2,2,HOST_LED_A,
+D4,2,A,HOST_LED_A,USB host power indicator
+D4,1,K,GND,
+U7,1,1OE,SD_CS,Gate1 enabled only while SD_CS is low
+U7,2,1A,SD_MISO,From J6
+U7,3,1Y,SPI_MISO,To MCU/SRAM bus
+U7,4,2OE,+3V3,Unused gate: disabled
+U7,5,2A,GND,Unused input tied low
+U7,6,2Y,NC,
+U7,7,GND,GND,
+U7,8,3Y,NC,
+U7,9,3A,GND,Unused input tied low
+U7,10,3OE,+3V3,Unused gate: disabled
+U7,11,4Y,NC,
+U7,12,4A,GND,Unused input tied low
+U7,13,4OE,+3V3,Unused gate: disabled
+U7,14,VCC,+3V3,C10 100nF close
+J1,1,VBUS,VBUS_IN,Akizuki #115426 USB-C DIP kit (economy). Check pin 1 = VBUS (square pad)
+J1,2,D-,NC,Power only
+J1,3,D+,NC,Power only
+J1,4,GND,GND,
+J1,5,CC1,USBC_CC1,5.1k R1 on main board
+J1,6,CC2,USBC_CC2,5.1k R2 on main board
+J1,7,GND,GND,
