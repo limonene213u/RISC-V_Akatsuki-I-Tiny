@@ -57,7 +57,18 @@ docs/
   BOM_rev03.md
   PINOUT_rev03.md
   BRINGUP_rev03.md
+firmware/
+  tiny-monitor/       CH32X035G8U6 UART monitor and host-side tests
 ```
+
+## Firmware
+
+The `firmware/tiny-monitor/` directory contains the Akatsuki I Tiny monitor for
+MounRiver Studio. It provides a UART console, board-aware GPIO policy, SPI SRAM
+and I2C EEPROM commands, and host-side tests for hardware-independent logic.
+
+See [`firmware/tiny-monitor/README.md`](firmware/tiny-monitor/README.md) for the
+terminal settings, build procedure, command reference, and safety policy.
 
 ## Project management
 

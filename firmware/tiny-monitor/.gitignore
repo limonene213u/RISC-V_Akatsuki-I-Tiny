@@ -1,0 +1,10 @@
+/build/
+/obj/
+/.settings/
+*.d
+*.o
+*.elf
+*.hex
+*.bin
+*.map
+*.lst
