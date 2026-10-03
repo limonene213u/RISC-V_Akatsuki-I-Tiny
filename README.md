@@ -56,6 +56,8 @@ RISC-V_Akatsuki-I-Tiny/
 
 Rev0.3の配線については、[`hardware/rev03/netlist_rev03.csv`](hardware/rev03/netlist_rev03.csv) をsource of truthとします。README、pin定義、firmwareとの矛盾を見つけた場合は、推測で配線を決めずに確認してください。
 
+MCUの物理address、memory容量、peripheral mapについては、[CH32X035 Datasheet V1.7](https://akizukidenshi.com/goodsaffix/CH32X035.pdf) を一次資料とします。
+
 ## Tiny Monitor v0.1
 
 [`firmware/tiny-monitor/`](firmware/tiny-monitor/) には、Rev0.3専用のbare-metal UART monitorが入っています。WCH EVT／MounRiver Studio系のstartup、linker script、StdPeriphを使用し、Arduino、RTOS、`ch32fun`には依存しません。
@@ -72,6 +74,8 @@ Rev0.3の配線については、[`hardware/rev03/netlist_rev03.csv`](hardware/r
 - SRAMとEEPROM間のsave／load
 - EEPROM memoとboot counter
 - 64 KiB境界、byte値、予約領域の検査
+- datasheet準拠のphysical memory map表示
+- USER SCRATCHに限定したnative memory操作、比較、CRC-32
 
 詳細なcommand仕様、安全設計、制限事項は、[`firmware/tiny-monitor/README.md`](firmware/tiny-monitor/README.md) を参照してください。
 
@@ -115,6 +119,13 @@ tiny>
 help
 info
 pins
+map [ram|flash|mmio|policy]
+
+md.b|md.h|md.w <address> [count]
+mw.b|mw.h|mw.w <address> <value> [count]
+cp.b|cp.h|cp.w <source> <destination> <count>
+cmp.b|cmp.h|cmp.w <address1> <address2> <count>
+crc32 <address> <length>
 
 gpio list
 gpio status <pin>
@@ -261,7 +272,7 @@ Native memory / MMIO
 GPIO and actual hardware
 ```
 
-今後は`regs`、`reg`、`asm`、`word`、`disasm`、`exec`、`step`、`run`、`md`、`mw`、`cp`、`cmp`、`map`などを、安全なscratch RAM、U-mode、PMP、trap recoveryと組み合わせて追加する予定です。
+`map`、`md`、`mw`、`cp`、`cmp`、`crc32`は、安全なmemory policy付きで実装済みです。今後は`regs`、`reg`、`asm`、`word`、`disasm`、`exec`、`step`、`run`などを、U-mode、PMP、trap recoveryと組み合わせて追加する予定です。
 
 これらは現時点では未実装です。現在利用できるcommandと将来計画を混同しないよう、実装完了後にhelpとREADMEを同時に更新します。
 

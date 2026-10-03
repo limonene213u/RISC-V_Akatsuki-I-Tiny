@@ -3,6 +3,7 @@
 #include "board_gpio.h"
 #include "console.h"
 #include "eeprom_24fc512.h"
+#include "memory_commands.h"
 #include "parser.h"
 #include "pin_policy.h"
 #include "sram_23lc512.h"
@@ -26,6 +27,12 @@ static void help(void)
     console_puts(
         "help                              show this text\r\n"
         "info                              show board and device status\r\n"
+        "map [ram|flash|mmio|policy]       show physical map and access policy\r\n"
+        "md.b|h|w <address> [count]        display native memory\r\n"
+        "mw.b|h|w <address> <value> [n]    fill USER SCRATCH\r\n"
+        "cp.b|h|w <src> <dst> <count>      copy to USER SCRATCH\r\n"
+        "cmp.b|h|w <a> <b> <count>         compare readable memory\r\n"
+        "crc32 <address> <length>           CRC-32 of readable memory\r\n"
         "sr <address> [length]             dump SRAM (default 16 bytes)\r\n"
         "sw <address> <byte> [byte...]     write SRAM\r\n"
         "er <address> [length]             dump EEPROM (default 16 bytes)\r\n"
@@ -244,7 +251,7 @@ void commands_execute(char *line)
     else if (!strcmp(v[0], "gpio")) cmd_gpio(v, c);
     else if (!strcmp(v[0], "led")) cmd_led(v, c);
     else if (!strcmp(v[0], "button")) cmd_button(v, c);
-    else puts("error: unknown command or arguments (type 'help')");
+    else if (!memory_commands_execute(v, c)) puts("error: unknown command or arguments (type 'help')");
 }
 void commands_init(void)
 {

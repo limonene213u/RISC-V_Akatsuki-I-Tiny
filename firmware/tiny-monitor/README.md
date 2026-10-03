@@ -32,6 +32,8 @@ GPIO commandは主役ではなく、Lチカやdigital sensor確認のための�
 
 firmwareのpin定義より上記Rev0.3資料を優先します。矛盾が見つかった場合は推測で変更せず、`HARDWARE REVIEW REQUIRED`として扱います。
 
+MCUのmemory mapと容量は[CH32X035 Datasheet V1.7](https://akizukidenshi.com/goodsaffix/CH32X035.pdf)を一次資料とします。
+
 ## Build
 
 MounRiver Studio 2付属のRISC-V Embedded GCCとGNU Makeを使用します。
@@ -129,6 +131,19 @@ led 0 on|off|toggle|auto
 button <0|1>
 ```
 
+### CPU native memory
+
+```text
+map [ram|flash|mmio|policy]
+md.b|md.h|md.w <address> [count]
+mw.b|mw.h|mw.w <address> <value> [count]
+cp.b|cp.h|cp.w <source> <destination> <count>
+cmp.b|cmp.h|cmp.w <address1> <address2> <count>
+crc32 <address> <length>
+```
+
+suffixなしの`md`、`mw`、`cp`、`cmp`は32-bit `.w`として扱います。`.h`と`.w`はそれぞれ2-byte、4-byte alignmentを要求します。
+
 LED1はsystem status専用なので手動操作できません。LED0を手動操作するとheartbeatが停止し、`led 0 auto`で再開します。
 
 ### External SPI SRAM
@@ -220,7 +235,7 @@ error: PB0 is locked (shared with PA7/SPI_MOSI)
 | `swi2c.c`, `eeprom_24fc512.c` | software I2Cと24FC512 |
 | `tiny_monitor.c` | startup、prompt、main loop、heartbeat |
 
-## Planned RISC-V Machine Monitor
+## RISC-V Machine Monitor
 
 次期段階では既存CH32X035 RISC-V Monitorの安全実行基盤を統合します。未実装commandを現在利用可能であるかのように表示しません。
 
@@ -242,7 +257,7 @@ reset
 
 user instructionは実CPUで実行しますが、U-mode、PMP、trap recoveryを使い、専用scratch RAMとexecution bufferの外へ出られない構成を前提とします。
 
-### Native memory monitor
+### Native memory monitor（implemented）
 
 ```text
 map
@@ -253,7 +268,9 @@ cmp.b|cmp.h|cmp.w <address1> <address2> <count>
 crc32 <address> <length>
 ```
 
-予定policy:
+上記commandは実装済みです。`map`はphysical map、`map ram`はlinker symbolから得た実際のRAM配置、`map mmio`はperipheral一覧、`map policy`は現在のaccess権限を表示します。
+
+現在のpolicy:
 
 - 内蔵Flashはread-only
 - 専用user scratch RAMだけread/write
@@ -264,7 +281,20 @@ crc32 <address> <length>
 - SPI SRAMとEEPROMはnative addressへ混在させない
 - Flash erase/programは通常の`mw/cp`から実行しない
 
-MMIOはreadでも副作用を持つregisterがあるため、Peripheral全域を無条件には公開しません。公式memory/register mapに基づくread allowlistを設けます。MMIO writeおよびassemblyからのhardware操作は、通常Monitorとは別の明示的な将来のlab modeでboard policyを通す設計とします。
+`mw`および`cp`のdestinationはUSER SCRATCHだけです。EXEC BUFFERへ一般memory commandから書くことはできません。将来の`word`／`asm`だけが専用経路で命令を書き込みます。
+
+```text
+USER SCRATCH   0x20000000-0x20000fff  RW-
+EXEC BUFFER    0x20001000-0x200013ff  R-X
+MONITOR        0x20001400-             protected
+MONITOR STACK  0x20004800-0x20004fff  protected
+```
+
+Code FLASHは`0x08000000-0x0800f7ff`です。`0x00000000`はboot選択によってFlashまたはsystem memoryが見えるaliasとして別に表示します。System FLASH、Vendor、Option、Core Private領域はprotectedです。
+
+MMIOはreadでも副作用を持つregisterがあるため、Peripheral全域を無条件には公開しません。現在はGPIOA/B/Cの設定、入力、出力registerに対するaligned 32-bit readだけをallowlist化しています。MMIO writeおよびassemblyからのhardware操作は、通常Monitorとは別の明示的な将来のlab modeでboard policyを通す設計とします。
+
+PIOCは20 KiB SRAMのうち4 KiBをprogram ROMとして共有できるため、現在は無効です。PIOC対応時にはlinker mapとPMPを再設計します。
 
 ## Tests and verification status
 
@@ -280,13 +310,16 @@ host test対象:
 - UART、SPI、I2C予約pin保護
 - unknown pin、invalid mode/value
 - output initial value requirement
+- native memory range multiplication／overflow／alignment
+- Flash、scratch、exec、Monitor RAMのread/write policy
+- EXEC BUFFER、MMIO write、unmapped addressの拒否
+- GPIO MMIO safe-read allowlist
 
 firmwareは`-Wall -Wextra -Werror`でビルドします。UART、LED、buttons、GPIO、23LC512、24FC512、boot counter、WCH-LinkE書込みは **HARDWARE TEST REQUIRED** です。実機確認していない項目を動作確認済みとは扱いません。
 
 ## Current limitations
 
 - assembler、register context、machine-word executionは未統合
-- `md/mw/cp/cmp/map/crc32`は未実装
-- MMIO read/writeとlab modeは未実装
+- MMIOの汎用read/writeとlab modeは未実装（GPIO safe-register readのみ実装）
 - native host GCCがない環境ではhost testはcompile-only確認
 - USB、SD filesystem、LCD、GUI、RTOSはv0.1の対象外

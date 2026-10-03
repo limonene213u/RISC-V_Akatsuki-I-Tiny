@@ -31,12 +31,15 @@ $(BUILD)/$(PROJECT).bin: $(BUILD)/$(PROJECT).elf
 size: $(BUILD)/$(PROJECT).elf
 	$(SIZE) $<
 test:
+	@if not exist "$(BUILD)" mkdir "$(BUILD)"
 	$(HOSTCC) -DHOST_TEST -std=c99 -Wall -Wextra -Werror -IUser tests/test_monitor_core.c User/parser.c -o $(BUILD)/test_monitor_core
 	$(BUILD)/test_monitor_core
 	$(HOSTCC) -DHOST_TEST -std=c99 -Wall -Wextra -Werror tests/test_line_endings.c -o $(BUILD)/test_line_endings
 	$(BUILD)/test_line_endings
 	$(HOSTCC) -DHOST_TEST -std=c99 -Wall -Wextra -Werror -IUser tests/test_pin_policy.c User/pin_policy.c -o $(BUILD)/test_pin_policy
 	$(BUILD)/test_pin_policy
+	$(HOSTCC) -DHOST_TEST -std=c99 -Wall -Wextra -Werror -IUser tests/test_memory_policy.c User/memory_policy.c -o $(BUILD)/test_memory_policy
+	$(BUILD)/test_memory_policy
 clean:
 	@if exist "$(BUILD)" rmdir /s /q "$(BUILD)"
 -include $(OBJECTS:.o=.d)
